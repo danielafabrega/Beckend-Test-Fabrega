@@ -1,0 +1,56 @@
+{% extends 'menu/base.html' %}
+
+{% block page_title %}Editing meals for {{ menu.date }}{% endblock %}
+
+{% block body_title %}Editing meals for <a href="{{ menu.get_absolute_url }}">{{ menu.date }}</a>{% endblock %}
+
+
+{% block content %}
+  <form action="" method="post" enctype="multipart/form-data">
+
+    {% for hidden_field in form.hidden_fields %}
+      {{ hidden_field.errors }}
+      {{ hidden_field }}
+    {% endfor %}
+
+    {% csrf_token %}
+
+    {{ form.management_form }}
+    {{ form.non_form_errors }}
+
+    {% for meal_form in form.forms %}
+
+      <hr>
+
+      <h2>
+        {% if meal_form.instance.id %}
+          Meal #{{ meal_form.instance.id }}</h2>
+        {% else %}
+          {% if form.forms|length > 1 %}
+            Add another meal
+          {% else %}
+            Add a meal
+          {% endif %}
+        {% endif %}
+      </h2>
+
+      {% for hidden_field in meal_form.hidden_fields %}
+        {{ hidden_field.errors }}
+      {% endfor %}
+
+      <table>
+        {{ meal_form.as_table }}
+      </table>
+      
+    {% endfor %}
+
+    <hr>
+
+    <p>
+      <input type="submit" value="Update meals">
+      &nbsp; &nbsp;
+      <a href="{{ menu.get_absolute_url  }}">Cancel</a>
+    </p>
+  </form>
+
+{% endblock content %}

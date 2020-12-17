@@ -1,0 +1,15 @@
+{% extends 'menu/base.html' %}
+
+{% block page_title %}Home{% endblock %}
+{% block body_title %}Home{% endblock %}
+
+
+{% block content %}
+
+  <p>
+    <a href="{% url 'menu:menu_list' %}">All menus</a>
+    |
+    <a href="{% url 'menu:menu_create' %}">Add a menu</a>
+  </p>
+
+{% endblock content %}

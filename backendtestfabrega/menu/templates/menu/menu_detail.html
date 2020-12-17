@@ -1,0 +1,48 @@
+{% extends 'menu/base.html' %}
+
+{% block page_title %}{{ menu.date }}{% endblock %}
+
+{% block body_title %}{{ menu.date }}{% endblock %}
+
+
+{% block content %}
+
+
+  <h2>Meals</h2>
+
+  {% if menu.meals.all %}
+
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for meal in menu.meals.all %}
+          <tr>
+            <td>{{ meal.content }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+  {% else %}
+
+    <p>This menu has no meals.</p>
+
+  {% endif %}
+
+  <p>
+    <a href="{% url 'menu:meal_update' pk=menu.pk %}">
+      {% if menu.meals.all %}
+        Edit these meals
+      {% else %}
+        Add some meals
+      {% endif %}
+    </a>
+    |
+    <a href="{% url 'menu:menu_list' %}">All menus</a>
+  </p>
+
+{% endblock content %}

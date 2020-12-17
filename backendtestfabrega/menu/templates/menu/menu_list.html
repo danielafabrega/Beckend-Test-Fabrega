@@ -1,0 +1,31 @@
+{% extends 'menu/base.html' %}
+
+{% block page_title %}Menus{% endblock %}
+
+{% block body_title %}Menus{% endblock %}
+
+
+{% block content %}
+
+  {% if menu_list %}
+
+    <ul>
+      {% for menu in menu_list %}
+        <li>
+          <a href="{{ menu.get_absolute_url }}">{{ menu.date}}</a>
+          <!--({{ publisher.books.count }} book{{ publisher.books.count|pluralize }})-->
+        </li>
+      {% endfor %}
+    </ul>
+
+  {% else %}
+
+    <p>There are no menus to display.</p>
+
+  {% endif %}
+
+  <p>
+    <a href="{% url 'menu:menu_create' %}">Add a menu</a>
+  </p>
+
+{% endblock content %}
