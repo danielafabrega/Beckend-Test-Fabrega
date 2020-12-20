@@ -7,16 +7,19 @@ from .forms import MenuForm, MenuMealFormset
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django import forms
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
 
 
 # Create your views here.
 
-class HomeView(TemplateView):
+class HomeView(PermissionRequiredMixin, TemplateView):
+    permission_required = 'menu.is_nora'
     template_name = 'menu/home.html'
 
-class MenuListView(ListView):
+class MenuListView(PermissionRequiredMixin, ListView):
+    permission_required = 'menu.is_nora'
     model = Menu
     template_name = 'menu/menu_list.html'
 
@@ -25,10 +28,12 @@ class MenuListView(ListView):
             date__gte= date.today()
         ).order_by('date')
 
-class MenuCreateView(CreateView):
+class MenuCreateView(PermissionRequiredMixin, CreateView):
+    permission_required = 'menu.is_nora'
     form_class = MenuForm
     model = Menu
     template_name = 'menu/menu_create.html'
+
 
     
 
@@ -43,12 +48,15 @@ class MenuCreateView(CreateView):
 '''
         
 
-class MenuDetailView(DetailView):
+class MenuDetailView(PermissionRequiredMixin, DetailView):
+    permission_required = 'menu.is_nora'
     model = Menu
     template_name = 'menu/menu_detail.html'
 
-class MenuMealsUpdateView(SingleObjectMixin, FormView):
 
+
+class MenuMealsUpdateView(PermissionRequiredMixin, SingleObjectMixin, FormView):
+    permission_required = 'menu.is_nora'
     model = Menu
     template_name = 'menu/menu_update.html'
 
@@ -78,7 +86,56 @@ class MenuMealsUpdateView(SingleObjectMixin, FormView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse('menu:menu_detail', kwargs={'pk': self.object.pk})
+        return reverse('menu:menu_detail',  kwargs={'pk': self.object.pk})
     
+class MenuDailyView(DetailView):
+    permission_required = 'menu.is_nora'
+    model = Menu
+    template_name = 'menu/menu_daily.html'
+
+
+  
+def selectMealView(request, pk):
+    print(pk)
+    
+    menu = Menu.objects.get(pk=pk)
+    print(menu.date)
+    return render(request, "menu/select_meal.html",  {'menu': menu})
+
+
+
+    '''   
+class ChoiceMealView(DetailView):
+    #print(self.request)
+    model = Menu
+    template_name = 'menu/meal_choice.html'
+
+    #def get(self, request):
+    #   return self.render_to_response(context)
+    def get_context_data(self, **kwargs):
+        context = super(ChoiceMealView, self).get_context_data(**kwargs)
+        menu_por_nosotro = Menu.objects.get(pk=self.request.resolver_match.kwargs.get('pk'))
+        context['menu_as'] = menu_por_nosotro
+        #print(dir(self.request))
+        #print(self.request.resolver_match)
+        print(self.request.resolver_match.kwargs.get('pk'))
+        context['Hola'] = "soy un string que va desde la vista"
+
+        #print(**kwargs['pk'])
+        #print(context.keys)
+        #context = self.get_context_data(object=self.object)
+        
+
+
+
+        #print(self.request.META)
+
+
+
+        #cart_product_form = CartAddProductForm()
+        #context['cart_product_form'] = cart_product_form
+        return context
+'''
+
 
 

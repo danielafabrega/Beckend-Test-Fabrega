@@ -62,4 +62,9 @@
     </main>
 
   </body>
+  <footer>
+  {%if user.is_authenticated%}
+    <a href="{% url 'users:logout'  %}?next=/">Logout</a>
+  {%endif%}
+  </footer>
 </html>

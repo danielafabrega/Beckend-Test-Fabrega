@@ -7,7 +7,9 @@ from django.core.exceptions import ValidationError
 from .models import Menu, Meal
 
 class DateInput(forms.DateInput): 
+    #super.__format__=
     input_type = 'date'
+    format = 'YYYY-MM-DD'
 
 def current_date(value):
     if date.today() >= value:

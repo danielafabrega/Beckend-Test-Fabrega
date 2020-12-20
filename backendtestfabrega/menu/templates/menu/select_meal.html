@@ -1,0 +1,20 @@
+<h1>{{ menu.date }}</h1>
+
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+
+<form action="{% url 'users:choice'%}" method="post">
+{% csrf_token %}
+{% for meal in menu.meals.all %}
+    <input type="radio" name="meal" id="meal{{ meal.counter }}" value="{{ meal.id }}">
+    <label for="meal{{ forloop.counter }}">{{ meal.content }}</label><br>
+{% endfor %} 
+<br>
+Specify your food customizations
+<br>
+<textarea name="customizations" rows="10" cols="40"></textarea>
+<br>
+<br>
+<input type="submit" value="select meal">
+</form>

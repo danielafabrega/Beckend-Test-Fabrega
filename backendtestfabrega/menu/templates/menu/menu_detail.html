@@ -43,6 +43,40 @@
     </a>
     |
     <a href="{% url 'menu:menu_list' %}">All menus</a>
+    |
+    
+  </p>
+  <p>
+  {% for meal in menu.meals.all %}
+
+          <h3>{{meal}}</h3>
+          <ul>
+          {% for choice in meal.choice_set.all%}
+          
+            <li>{{choice.user}}</li>
+          
+          {%endfor%}
+          </ul>
+          
+
+  {% endfor %}
+          <!--
+          {%if meal.choice.all%}
+          <tr>
+            {% for choice in meal.choice.all%}
+            <td>{{ choice}}</td>
+          </tr>
+          {%endfor%}
+          {%endif%}
+    
+    -->
+        <!--
+    {% for meal in menu.meals.all %}
+          <tr>
+            <td>{{ meal.content }}</td>
+          </tr>
+    {% endfor %}
+    -->
   </p>
 
 {% endblock content %}

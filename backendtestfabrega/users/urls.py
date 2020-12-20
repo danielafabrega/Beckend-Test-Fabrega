@@ -7,5 +7,7 @@ app_name = 'users'
 
 urlpatterns = [
     path('users/', include('django.contrib.auth.urls')),
-    path('users/prueba/', views.PruebaView, name='prueba')
+    path('users/choice/', views.createChoiceView, name='choice'),
+    path('users/afterlogin', views.afterLogin, name='afterlogin'),
+    #path('users/logout/', views.logout, name='logout')
     ]
