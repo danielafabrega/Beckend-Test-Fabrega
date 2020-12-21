@@ -24,6 +24,7 @@ class MenuListView(PermissionRequiredMixin, ListView):
     template_name = 'menu/menu_list.html'
 
     def get_queryset(self):
+    #Only the menus from the current day are shown ordered by date
         return Menu.objects.filter(
             date__gte= date.today()
         ).order_by('date')
@@ -34,18 +35,8 @@ class MenuCreateView(PermissionRequiredMixin, CreateView):
     model = Menu
     template_name = 'menu/menu_create.html'
 
-
-    
-
     def form_valid(self, form):
         return super().form_valid(form)
-        '''
-        messages.add_message(
-            self.request,
-            messages.SUCCESS,
-            'The menu was added.'
-        )
-'''
         
 
 class MenuDetailView(PermissionRequiredMixin, DetailView):
@@ -56,6 +47,7 @@ class MenuDetailView(PermissionRequiredMixin, DetailView):
 
 
 class MenuMealsUpdateView(PermissionRequiredMixin, SingleObjectMixin, FormView):
+    #Add and edit meals
     permission_required = 'menu.is_nora'
     model = Menu
     template_name = 'menu/menu_update.html'
@@ -74,15 +66,6 @@ class MenuMealsUpdateView(PermissionRequiredMixin, SingleObjectMixin, FormView):
 
     def form_valid(self, form):
         form.save()
-        '''
-
-        messages.add_message(
-            self.request,
-            messages.SUCCESS,
-            'Changes were saved.'
-        )
-        '''
-
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
@@ -96,46 +79,12 @@ class MenuDailyView(DetailView):
 
   
 def selectMealView(request, pk):
-    print(pk)
-    
+    #View so that employees can select their meal
     menu = Menu.objects.get(pk=pk)
     print(menu.date)
     return render(request, "menu/select_meal.html",  {'menu': menu})
 
 
-
-    '''   
-class ChoiceMealView(DetailView):
-    #print(self.request)
-    model = Menu
-    template_name = 'menu/meal_choice.html'
-
-    #def get(self, request):
-    #   return self.render_to_response(context)
-    def get_context_data(self, **kwargs):
-        context = super(ChoiceMealView, self).get_context_data(**kwargs)
-        menu_por_nosotro = Menu.objects.get(pk=self.request.resolver_match.kwargs.get('pk'))
-        context['menu_as'] = menu_por_nosotro
-        #print(dir(self.request))
-        #print(self.request.resolver_match)
-        print(self.request.resolver_match.kwargs.get('pk'))
-        context['Hola'] = "soy un string que va desde la vista"
-
-        #print(**kwargs['pk'])
-        #print(context.keys)
-        #context = self.get_context_data(object=self.object)
-        
-
-
-
-        #print(self.request.META)
-
-
-
-        #cart_product_form = CartAddProductForm()
-        #context['cart_product_form'] = cart_product_form
-        return context
-'''
 
 
 

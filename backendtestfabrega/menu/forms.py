@@ -3,36 +3,32 @@ from django.utils.translation import ugettext_lazy as _
 from django import forms
 from datetime import date
 from django.core.exceptions import ValidationError
-#from publishing.utils.forms import is_empty_form, is_form_persisted
 from .models import Menu, Meal
 
+
 class DateInput(forms.DateInput): 
-    #super.__format__=
     input_type = 'date'
     format = 'YYYY-MM-DD'
 
 def current_date(value):
+    #Avoid creating a menu in the past
     if date.today() >= value:
         raise ValidationError("you are trying to create a menu in the past")
 
     
 
 class MenuForm(forms.ModelForm):
-   # date = CharField()
+    #Create an empty menu on the selected day
     date = forms.DateField( validators=[current_date],widget=DateInput)
     class Meta:
         model = Menu
         fields = ["date"]
-        #widgets = {
-        #    'date': DateInput
-        #}
+       
 
 class MenuFormset(BaseInlineFormSet):
     """
-    The base formset for editing Books belonging to a Publisher, and the
-    BookImages belonging to those Books.
+    The base formset for editing Meals belonging to a Menu
     """
-
     def add_fields(self, form, index):
         super().add_fields(form, index)
 
@@ -56,9 +52,7 @@ class MenuFormset(BaseInlineFormSet):
             if self._is_adding_nested_inlines_to_empty_form(form):
                 form.add_error(
                     field=None,
-                    error=_('You are trying to add image(s) to a book which '
-                            'does not yet exist. Please add information '
-                            'about the book and choose the image file(s) again.'))
+                    error=_(''))
 
     def save(self, commit=True):
        
@@ -89,7 +83,7 @@ class MenuFormset(BaseInlineFormSet):
         return any(not is_empty_form(nested_form) for nested_form in non_deleted_forms)
 
 
-
+#This is the formset for the Meals belonging to a Menu 
 MenuMealFormset = inlineformset_factory(
                                 Menu,
                                 Meal,
