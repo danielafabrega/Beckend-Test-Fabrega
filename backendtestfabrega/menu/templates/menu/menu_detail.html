@@ -5,8 +5,10 @@
 {% block body_title %}{{ menu.date }}{% endblock %}
 
 
-{% block content %}
 
+{% block content %}
+<a href="{% url 'menu:menu_daily' pk=menu.pk %}">{% url 'menu:menu_daily' pk=menu.pk %}</a>
+<button>schedule reminder</button>
 
   <h2>Meals</h2>
 
@@ -62,5 +64,7 @@
   {% endfor %}
          
   </p>
+
+
 
 {% endblock content %}
